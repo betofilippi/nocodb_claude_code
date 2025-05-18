@@ -2,6 +2,8 @@
 
 Servidor MCP (Model Context Protocol) completo para integração com NocoDB API v2.
 
+🚀 **Agora com suporte para HTTP REST API para deploy no Railway!**
+
 ## Features
 
 ✨ **Gerenciamento completo de bases, tabelas e registros**
@@ -203,6 +205,44 @@ claude mcp add -s user nocodb -- python3 /caminho/para/mcp_nocodb_server_full.py
 ### Escopo de projeto (compartilhado via .mcp.json)
 ```bash
 claude mcp add -s project nocodb -- python3 /caminho/para/mcp_nocodb_server_full.py
+```
+
+## Deploy HTTP Server (Railway)
+
+Este projeto inclui uma versão HTTP REST API que pode ser deployada em plataformas como Railway.
+
+### Arquivos Incluídos
+
+- `nocodb_http_server.py` - Servidor HTTP com FastAPI
+- `Dockerfile` - Para containerização
+- `railway.toml` - Configuração do Railway
+- `API_DOCUMENTATION.md` - Documentação completa da API
+
+### Deploy no Railway
+
+1. Fork este repositório
+2. Conecte ao Railway via GitHub
+3. Configure as variáveis de ambiente:
+   - `NOCODB_BASE_URL`
+   - `NOCODB_API_KEY`
+4. Deploy automático
+
+### Endpoints
+
+- `GET /` - Informações do servidor
+- `GET /health` - Health check
+- `GET /tools` - Lista todas as ferramentas disponíveis
+- `POST /execute` - Executa uma ferramenta
+
+### Exemplo de uso
+
+```bash
+curl -X POST https://seu-app.railway.app/execute \
+  -H "Content-Type: application/json" \
+  -d '{
+    "tool": "list_bases",
+    "args": {}
+  }'
 ```
 
 ## Segurança

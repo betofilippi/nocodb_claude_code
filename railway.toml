@@ -1,0 +1,10 @@
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+numReplicas = 1
+startCommand = "python nocodb_http_server.py"
+
+[environment]
+PORT = { value = "$PORT" }
