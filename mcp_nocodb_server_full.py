@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 # Configuração do NocoDB
 NOCODB_BASE_URL = os.getenv("NOCODB_BASE_URL", "https://nocodb.plataforma.app/api/v2")
-NOCODB_API_KEY = os.getenv("NOCODB_API_KEY", "FjBfW7RYV76huT4cYd78P642GqDXwXn4c05dBzoE")
+NOCODB_API_KEY = os.getenv("NOCODB_API_KEY", "")
 
 class NocoDBMCPServer:
     def __init__(self):

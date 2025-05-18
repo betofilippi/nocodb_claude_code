@@ -1,0 +1,21 @@
+#!/bin/bash
+# Script para configurar GitHub CLI e fazer push do repositório
+
+echo "=== Instalação do GitHub CLI ==="
+echo "Execute os seguintes comandos com sudo:"
+echo ""
+echo "curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg"
+echo "echo \"deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main\" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null"
+echo "sudo apt update"
+echo "sudo apt install gh"
+echo ""
+echo "=== Após instalar o GitHub CLI ==="
+echo "1. Autentique com: gh auth login"
+echo "2. Crie o repositório: gh repo create betofilippi/nocodb_claude_code --public --source=. --remote=origin --push"
+echo ""
+echo "=== Alternativa: usar HTTPS ==="
+echo "1. Crie um Personal Access Token em: https://github.com/settings/tokens"
+echo "2. Execute:"
+echo "   git remote add origin https://github.com/betofilippi/nocodb_claude_code.git"
+echo "   git push -u origin main"
+echo "3. Use o token como senha quando solicitado"
