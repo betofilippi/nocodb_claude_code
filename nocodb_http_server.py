@@ -30,8 +30,10 @@ class NocoDBAPI:
     def __init__(self):
         self.base_url = NOCODB_BASE_URL
         self.api_key = NOCODB_API_KEY
+        # Try both header formats for compatibility
         self.headers = {
             "xc-token": self.api_key,
+            "xc-auth": self.api_key,
             "Content-Type": "application/json"
         }
     
@@ -55,9 +57,18 @@ class NocoDBAPI:
             logger.error(f"Request error: {e}")
             raise HTTPException(status_code=500, detail=str(e))
     
-    # Bases
+    # Bases/Projects
     def list_bases(self) -> List[Dict[str, Any]]:
-        return self._make_request("GET", "/bases")
+        # Try both v1 and v2 endpoints
+        try:
+            return self._make_request("GET", "/bases")
+        except HTTPException:
+            # Fallback to v1 projects endpoint
+            base_url_v1 = self.base_url.replace("/api/v2", "/api/v1")
+            url = f"{base_url_v1}/db/meta/projects"
+            response = requests.get(url, headers=self.headers)
+            response.raise_for_status()
+            return response.json()
     
     def get_base(self, base_id: str) -> Dict[str, Any]:
         return self._make_request("GET", f"/bases/{base_id}")
