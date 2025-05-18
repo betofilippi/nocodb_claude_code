@@ -1,0 +1,37 @@
+openapi: 3.0.0
+info:
+  title: NocoDB API
+  version: 1.0.0
+servers:
+  - url: https://nocodbclaudecode-production.up.railway.app
+paths:
+  /execute:
+    post:
+      summary: Execute NocoDB operation
+      operationId: nocodb_execute
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tool:
+                  type: string
+                  description: The operation to execute
+                args:
+                  type: object
+                  description: Arguments for the operation
+              required:
+                - tool
+                - args
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: object
