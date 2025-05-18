@@ -1,0 +1,222 @@
+{
+  "name": "nocodb_execute",
+  "description": "Execute operations on NocoDB database through a REST API server. This tool provides comprehensive access to NocoDB features including bases, tables, records, views, filters, webhooks, and more.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "tool": {
+        "type": "string",
+        "description": "The NocoDB operation to execute",
+        "enum": [
+          "list_bases",
+          "get_base",
+          "create_base",
+          "update_base",
+          "delete_base",
+          "list_tables",
+          "get_table",
+          "create_table",
+          "update_table",
+          "delete_table",
+          "list_columns",
+          "create_column",
+          "update_column",
+          "delete_column",
+          "list_records",
+          "get_record",
+          "create_record",
+          "update_record",
+          "delete_record",
+          "bulk_create_records",
+          "bulk_update_records",
+          "bulk_delete_records",
+          "list_views",
+          "create_view",
+          "update_view",
+          "delete_view",
+          "list_filters",
+          "create_filter",
+          "update_filter",
+          "delete_filter",
+          "list_sorts",
+          "create_sort",
+          "update_sort",
+          "delete_sort",
+          "create_shared_view",
+          "update_shared_view",
+          "delete_shared_view",
+          "list_webhooks",
+          "create_webhook",
+          "update_webhook",
+          "delete_webhook",
+          "global_search",
+          "list_comments",
+          "create_comment",
+          "update_comment",
+          "delete_comment",
+          "upload_file"
+        ]
+      },
+      "args": {
+        "type": "object",
+        "description": "The arguments specific to each tool operation",
+        "properties": {
+          "base_id": {
+            "type": "string",
+            "description": "The ID of the base/project"
+          },
+          "table_id": {
+            "type": "string",
+            "description": "The ID of the table"
+          },
+          "record_id": {
+            "type": "string",
+            "description": "The ID of the record"
+          },
+          "column_id": {
+            "type": "string",
+            "description": "The ID of the column"
+          },
+          "view_id": {
+            "type": "string",
+            "description": "The ID of the view"
+          },
+          "filter_id": {
+            "type": "string",
+            "description": "The ID of the filter"
+          },
+          "sort_id": {
+            "type": "string",
+            "description": "The ID of the sort"
+          },
+          "hook_id": {
+            "type": "string",
+            "description": "The ID of the webhook"
+          },
+          "comment_id": {
+            "type": "string",
+            "description": "The ID of the comment"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name for base, table, column, etc."
+          },
+          "title": {
+            "type": "string",
+            "description": "Title for views, webhooks"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description text"
+          },
+          "columns": {
+            "type": "array",
+            "description": "Array of column definitions for table creation",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {"type": "string"},
+                "type": {"type": "string"},
+                "required": {"type": "boolean"}
+              }
+            }
+          },
+          "column_data": {
+            "type": "object",
+            "description": "Column configuration data"
+          },
+          "record_data": {
+            "type": "object",
+            "description": "Record data for create/update operations"
+          },
+          "records": {
+            "type": "array",
+            "description": "Array of records for bulk operations",
+            "items": {"type": "object"}
+          },
+          "record_ids": {
+            "type": "array",
+            "description": "Array of record IDs for bulk delete",
+            "items": {"type": "string"}
+          },
+          "filter_data": {
+            "type": "object",
+            "description": "Filter configuration data"
+          },
+          "webhook_data": {
+            "type": "object",
+            "description": "Webhook configuration data"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Number of records to return (default: 25)"
+          },
+          "offset": {
+            "type": "integer",
+            "description": "Number of records to skip (default: 0)"
+          },
+          "fields": {
+            "type": "array",
+            "description": "List of fields to include in the response",
+            "items": {"type": "string"}
+          },
+          "where": {
+            "type": "string",
+            "description": "Filter condition string"
+          },
+          "sort": {
+            "type": "array",
+            "description": "Sort criteria",
+            "items": {"type": "string"}
+          },
+          "view_type": {
+            "type": "string",
+            "description": "Type of view (grid, gallery, kanban, etc.)"
+          },
+          "field": {
+            "type": "string",
+            "description": "Field name for sorting"
+          },
+          "direction": {
+            "type": "string",
+            "description": "Sort direction (asc or desc)",
+            "enum": ["asc", "desc"]
+          },
+          "password": {
+            "type": "string",
+            "description": "Password for shared view"
+          },
+          "url": {
+            "type": "string",
+            "description": "URL for webhooks"
+          },
+          "event": {
+            "type": "string",
+            "description": "Event type for webhooks"
+          },
+          "condition": {
+            "type": "object",
+            "description": "Condition for webhooks"
+          },
+          "query": {
+            "type": "string",
+            "description": "Search query string"
+          },
+          "comment": {
+            "type": "string",
+            "description": "Comment text"
+          },
+          "storage": {
+            "type": "string",
+            "description": "Storage type for file upload"
+          },
+          "file_path": {
+            "type": "string",
+            "description": "Local file path to upload"
+          }
+        }
+      }
+    },
+    "required": ["tool", "args"]
+  }
+}

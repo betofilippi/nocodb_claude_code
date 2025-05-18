@@ -1,0 +1,19 @@
+{
+  "name": "nocodb_execute",
+  "description": "Execute operations on NocoDB database through a REST API server",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "tool": {
+        "type": "string",
+        "description": "The NocoDB operation to execute",
+        "enum": ["list_bases","get_base","create_base","update_base","delete_base","list_tables","get_table","create_table","update_table","delete_table","list_columns","create_column","update_column","delete_column","list_records","get_record","create_record","update_record","delete_record","bulk_create_records","bulk_update_records","bulk_delete_records","list_views","create_view","update_view","delete_view","list_filters","create_filter","update_filter","delete_filter","list_sorts","create_sort","update_sort","delete_sort","create_shared_view","update_shared_view","delete_shared_view","list_webhooks","create_webhook","update_webhook","delete_webhook","global_search","list_comments","create_comment","update_comment","delete_comment","upload_file"]
+      },
+      "args": {
+        "type": "object",
+        "description": "The arguments specific to each tool operation"
+      }
+    },
+    "required": ["tool", "args"]
+  }
+}
