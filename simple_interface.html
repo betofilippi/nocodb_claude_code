@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NocoDB Manager - Interface Simples</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .button-group {
+            margin: 20px 0;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        .loading {
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 NocoDB Manager</h1>
+        <p>Interface simples para gerenciar seu NocoDB</p>
+        
+        <div class="button-group">
+            <h3>Operações Rápidas</h3>
+            <button onclick="listBases()">📋 Listar Bases</button>
+            <button onclick="listTables()">📊 Listar Tabelas</button>
+            <button onclick="listRecords()">📝 Listar Registros</button>
+        </div>
+        
+        <div class="form-group">
+            <h3>Criar Novo Registro</h3>
+            <label>ID da Tabela:</label>
+            <input type="text" id="tableId" placeholder="Ex: tbl_123">
+            
+            <label>Dados (JSON):</label>
+            <textarea id="recordData" rows="4" placeholder='{"nome": "João", "email": "joao@email.com"}'></textarea>
+            
+            <button onclick="createRecord()">➕ Criar Registro</button>
+        </div>
+        
+        <div class="form-group">
+            <h3>Executar Operação Customizada</h3>
+            <label>Operação:</label>
+            <select id="operation">
+                <option value="list_bases">list_bases</option>
+                <option value="get_base">get_base</option>
+                <option value="list_tables">list_tables</option>
+                <option value="list_records">list_records</option>
+                <option value="create_record">create_record</option>
+                <option value="update_record">update_record</option>
+                <option value="delete_record">delete_record</option>
+                <option value="global_search">global_search</option>
+            </select>
+            
+            <label>Argumentos (JSON):</label>
+            <textarea id="customArgs" rows="3" placeholder="{}">{}</textarea>
+            
+            <button onclick="executeCustom()">🔧 Executar</button>
+        </div>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const API_URL = 'https://nocodbclaudecode-production.up.railway.app/execute';
+        
+        // Função genérica para chamar API
+        async function callAPI(tool, args = {}) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<div class="loading">Carregando...</div>';
+            
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({tool, args})
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="success">✅ Sucesso!</div>
+                        <div class="result">${JSON.stringify(data, null, 2)}</div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">❌ Erro ${response.status}</div>
+                        <div class="result">${JSON.stringify(data, null, 2)}</div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">❌ Erro de conexão</div>
+                    <div class="result">${error.message}</div>
+                `;
+            }
+        }
+        
+        // Funções específicas
+        function listBases() {
+            callAPI('list_bases');
+        }
+        
+        function listTables() {
+            const baseId = prompt('Digite o ID da base:');
+            if (baseId) {
+                callAPI('list_tables', {base_id: baseId});
+            }
+        }
+        
+        function listRecords() {
+            const tableId = prompt('Digite o ID da tabela:');
+            if (tableId) {
+                callAPI('list_records', {table_id: tableId, limit: 10});
+            }
+        }
+        
+        function createRecord() {
+            const tableId = document.getElementById('tableId').value;
+            const recordData = document.getElementById('recordData').value;
+            
+            if (!tableId) {
+                alert('Por favor, informe o ID da tabela');
+                return;
+            }
+            
+            try {
+                const data = JSON.parse(recordData || '{}');
+                callAPI('create_record', {
+                    table_id: tableId,
+                    record_data: data
+                });
+            } catch (e) {
+                alert('JSON inválido nos dados do registro');
+            }
+        }
+        
+        function executeCustom() {
+            const operation = document.getElementById('operation').value;
+            const customArgs = document.getElementById('customArgs').value;
+            
+            try {
+                const args = JSON.parse(customArgs || '{}');
+                callAPI(operation, args);
+            } catch (e) {
+                alert('JSON inválido nos argumentos');
+            }
+        }
+        
+        // Exemplo de uso ao carregar
+        window.onload = () => {
+            console.log('NocoDB Manager carregado! Use os botões para interagir.');
+        };
+    </script>
+</body>
+</html>
