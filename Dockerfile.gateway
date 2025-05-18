@@ -1,0 +1,40 @@
+FROM python:3.9-slim
+
+WORKDIR /app
+
+# Instalar dependências do sistema
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    curl \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copiar arquivos de requisitos
+COPY requirements_gateway.txt .
+
+# Instalar dependências Python
+RUN pip install --no-cache-dir -r requirements_gateway.txt
+
+# Copiar arquivos do gateway
+COPY mcp_gateway_simple.py .
+COPY mcp_servers.yaml .
+
+# Copiar servidores MCP (ajuste conforme necessário)
+COPY mcp_nocodb_server_full.py .
+
+# Criar diretório para logs
+RUN mkdir -p /app/logs
+
+# Expor porta
+EXPOSE 8002
+
+# Variáveis de ambiente
+ENV PYTHONUNBUFFERED=1
+ENV LOG_LEVEL=INFO
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:8002/health || exit 1
+
+# Comando de inicialização
+CMD ["python", "mcp_gateway_simple.py"]

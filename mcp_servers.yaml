@@ -1,0 +1,33 @@
+servers:
+  - name: nocodb
+    command: python /home/betofilippi/projects/nocodb_mcp_full/mcp_nocodb_server_full.py
+    description: NocoDB MCP Server - Database operations
+    env_vars:
+      NOCODB_BASE_URL: https://nocodb.plataforma.app/api/v2
+      NOCODB_API_KEY: 
+    enabled: true
+    auto_start: true
+
+  - name: filesystem
+    command: mcp-server-filesystem
+    description: Filesystem MCP Server - File operations
+    env_vars:
+      ALLOWED_PATHS: /home/user/projects
+    enabled: true
+    auto_start: false
+
+  - name: github
+    command: mcp-server-github
+    description: GitHub MCP Server - Repository operations
+    env_vars:
+      GITHUB_TOKEN: 
+    enabled: false
+    auto_start: false
+
+  - name: memory
+    command: mcp-server-memory
+    description: Memory MCP Server - Persistent memory storage
+    env_vars:
+      MEMORY_FILE: /tmp/mcp_memory.json
+    enabled: true
+    auto_start: false
